@@ -113,11 +113,9 @@ impl EventHandler for TextFieldState {
                 if self.cursor.0 > 0 {
                     self.cursor.0 -= 1;
                     self.lines[self.cursor.1].remove_char(self.cursor.0);
-                } else if !self.lines.is_empty() {
+                } else if self.cursor.1 > 0 && !self.lines.is_empty() {
                     let line = self.lines.remove(self.cursor.1);
-                    if self.cursor.1 > 0 {
-                        self.cursor.1 -= 1;
-                    }
+                    self.cursor.1 -= 1;
                     self.cursor.0 = self.current_line_len();
                     if !self.lines.is_empty() {
                         self.lines[self.cursor.1].push_str(&line);
