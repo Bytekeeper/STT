@@ -6,7 +6,7 @@ import org.gradle.internal.os.OperatingSystem
 
 
 plugins {
-    val kotlinVersion = "1.7.10"
+    val kotlinVersion = "1.9.24"
     application
 
     jacoco
@@ -17,10 +17,10 @@ plugins {
     id("org.sonarqube") version "5.1.0.4882"
     id("com.github.ben-manes.versions") version "0.36.0"
 
-    id("org.openjfx.javafxplugin") version "0.0.13"
+    id("org.openjfx.javafxplugin") version "0.1.0"
 
     id("org.javamodularity.moduleplugin") version "1.8.12"
-    id("org.beryx.jlink") version "2.25.0"
+    id("org.beryx.jlink") version "3.0.1"
 
     id("com.palantir.git-version") version "2.0.0"
 }
@@ -48,7 +48,7 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
 }
 
 kapt {
@@ -64,7 +64,7 @@ configurations {
 val spek_version = "2.0.4"
 
 dependencies {
-    val daggerVersion = "2.43.1"
+    val daggerVersion = "2.50" // with dagger 2.52 they introduced an incomplete usage ofjakarta.inject
     antlr(group = "org.antlr", name = "antlr4", version = "4.9.1")
     implementation(group = "org.antlr", name = "antlr4-runtime", version = "4.9.1")
 
@@ -81,14 +81,14 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     testImplementation("commons-io:commons-io:2.8.0")
-    testImplementation("org.mockito:mockito-core:4.5.1")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
-    testImplementation("org.assertj:assertj-core:3.18.1")
+    testImplementation("org.mockito:mockito-core:5.12.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
+    testImplementation("org.assertj:assertj-core:3.26.3")
     testImplementation("junit:junit-dep:4.11")
 }
 
 javafx {
-    version = "17.0.1"
+    version = "21.0.4"
     modules("javafx.base", "javafx.controls", "javafx.fxml", "javafx.graphics")
 }
 
@@ -168,7 +168,7 @@ tasks.withType<AntlrTask> {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
+    kotlinOptions.jvmTarget = "21"
 }
 
 //tasks.named("dependencyUpdates", com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask::class.java).configure {
