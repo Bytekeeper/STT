@@ -1,7 +1,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.jetbrains.kotlin.gradle.internal.KaptTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.sonarqube.gradle.SonarQubeTask
 import org.javamodularity.moduleplugin.extensions.TestModuleOptions
 import org.gradle.internal.os.OperatingSystem
 
@@ -15,7 +14,7 @@ plugins {
     antlr
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.sonarqube") version "3.1"
+    id("org.sonarqube") version "5.1.0.4882"
     id("com.github.ben-manes.versions") version "0.36.0"
 
     id("org.openjfx.javafxplugin") version "0.0.13"
@@ -93,6 +92,13 @@ javafx {
     modules("javafx.base", "javafx.controls", "javafx.fxml", "javafx.graphics")
 }
 
+sonar {
+    properties {
+        property("sonar.projectkey", "org.stt:stt")
+        property("sonar.projectName", "SimpleTimeTracking")
+    }
+}
+
 distributions.getByName("main") {
     contents {
         include("**/STT*")
@@ -117,7 +123,7 @@ tasks.test {
     }
 }
 
-tasks.withType<KaptTask> {
+tasks.withType<org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask> {
     dependsOn(tasks.withType<AntlrTask>())
 }
 // provided by plugin: com.palantir.git-version
@@ -159,11 +165,6 @@ gradle.taskGraph.whenReady {
 tasks.withType<AntlrTask> {
     maxHeapSize = "64m"
     arguments = arguments + "-visitor" + "-long-messages"
-}
-
-tasks.withType<SonarQubeTask> {
-    properties += "sonar.projectName" to "SimpleTimeTracking"
-    properties += "sonar.projectKey" to "org.stt:stt"
 }
 
 tasks.withType<KotlinCompile> {
